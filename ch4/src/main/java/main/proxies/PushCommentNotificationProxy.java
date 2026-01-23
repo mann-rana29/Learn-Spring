@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
-@Qualifier("EMAIL")
-public class EmailCommentNotificationProxy  implements  CommentNotificationProxy{
+@Qualifier("PUSH")
+public class PushCommentNotificationProxy implements CommentNotificationProxy{
 
     @Override
     public void sendComment(Comment comment){
-        System.out.println("Sending notification for comment : " + comment.getText());
+        System.out.println("Sending Push Comment : " + comment.getText());
     }
 }
