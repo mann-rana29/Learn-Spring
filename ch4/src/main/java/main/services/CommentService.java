@@ -3,7 +3,10 @@ package main.services;
 import main.models.Comment;
 import main.proxies.CommentNotificationProxy;
 import main.repositories.CommentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentNotificationProxy commentNotificationProxy;
