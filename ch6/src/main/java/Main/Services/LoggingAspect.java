@@ -24,6 +24,6 @@ public class LoggingAspect {
         Object returned = joinPoint.proceed();
         logger.info("Method executed and returned " + returned);
 
-        return returned;
+        return "FAILED";
     }
 }
