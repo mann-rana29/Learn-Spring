@@ -1,14 +1,36 @@
 package main.ch11service2.proxies;
 
 import main.ch11service2.models.Payment;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
-@FeignClient(name = "payments", url = "${name.service.url}")
-public interface PaymentsProxy {
+import org.springframework.web.client.RestTemplate;
 
-    @PostMapping("/payment")
-    public Payment createPayment(@RequestHeader String requestId , @RequestBody Payment payment );
+import java.util.UUID;
+
+@Component
+public class PaymentsProxy {
+    private final RestTemplate rest;
+
+    @Value("${name.service.url}")
+    private String paymentsServiceUrl;
+
+    public PaymentsProxy(RestTemplate rest){
+        this.rest = rest;
+    }
+
+    public Payment createPayment(Payment payment) {
+        String uri = paymentsServiceUrl + "/payment";
+
+        HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.add("requestId", UUID.randomUUID().toString());
+        HttpEntity<Payment> httpEntity = new HttpEntity<>(payment,headers);
+
+        ResponseEntity<Payment> response = rest.exchange(uri, HttpMethod.POST,httpEntity,Payment.class);
+        return response.getBody();
+    }
 }
